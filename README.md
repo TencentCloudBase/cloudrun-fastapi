@@ -67,10 +67,6 @@ hypercorn main:app --bind 0.0.0.0:80
 
 访问`http://127.0.0.1:80`即可返回相应结果。
 
-### 源码
-
-[cloudrun-fastapi](https://github.com/TencentCloudBase/tcbr-templates/tree/main/cloudrun-fastapi)
-
 ### 部署到云托管
 
 1、在cloudrun-fastapi目录下创建一个名称为Dockerfile的新文件,内容如下:
