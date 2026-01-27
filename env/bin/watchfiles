@@ -1,4 +1,4 @@
-#!/Users/bruceyyan/IdeaProjects/cloudrun-template-github/cloudrun-fastapi/env/bin/python
+#!/Users/bruceyyan/IdeaProjects/cloudrun-template-github/cloudrun-fastapi/env/bin/python3.10
 # -*- coding: utf-8 -*-
 import re
 import sys
