@@ -194,6 +194,43 @@ curl -X POST https://your-function-url/api/users \
 
 ## 常见问题
 
+### Q: 如何解决腾讯云函数中的 pydantic_core 错误？
+
+**错误信息**：
+```
+ModuleNotFoundError: No module named 'pydantic_core._pydantic_core'
+```
+
+**根本原因**：
+- `pydantic_core` 是 C 扩展模块，在云函数 Linux 环境中可能架构不匹配
+- FastAPI 新版本依赖 Pydantic 2.x，而 Pydantic 2.x 依赖 `pydantic_core`
+
+**解决方案**：
+
+#### 方案 A：使用 Pydantic 1.x（推荐）
+```txt
+# requirements.txt - 云函数兼容版本
+fastapi==0.95.2
+uvicorn==0.22.0
+pydantic==1.10.12
+python-multipart==0.0.6
+```
+
+#### 方案 B：完全避免 Pydantic
+```txt
+# requirements-no-pydantic.txt
+starlette==0.27.0
+uvicorn==0.22.0
+orjson==3.9.10
+```
+
+#### 方案 C：指定构建平台
+```bash
+pip install pydantic==1.10.12 --platform linux_x86_64 --only-binary=:all:
+```
+
+**详细解决指南**：请参考 [腾讯云函数部署指南](./scf-deployment.md)
+
 ### Q: 为什么 HTTP 云函数必须使用 9000 端口？
 A: CloudBase HTTP 云函数要求应用监听 9000 端口，这是平台的标准配置。通过在 `scf_bootstrap` 中设置 `PORT=9000` 环境变量来控制端口，本地开发时默认使用 8080 端口。
 

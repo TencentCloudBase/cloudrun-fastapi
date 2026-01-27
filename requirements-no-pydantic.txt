@@ -1,0 +1,10 @@
+# 完全无 Pydantic 版本 - 使用 Starlette
+starlette==0.27.0
+uvicorn==0.22.0
+
+# MySQL 数据库依赖
+PyMySQL==1.1.0
+aiomysql==0.2.0
+
+# JSON 处理
+orjson==3.9.10

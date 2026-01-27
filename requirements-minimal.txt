@@ -1,0 +1,5 @@
+# 最小化依赖版本 - 适用于云函数环境（无 Pydantic）
+fastapi==0.104.1
+uvicorn==0.24.0
+aiomysql==0.2.0
+PyMySQL==1.1.0
