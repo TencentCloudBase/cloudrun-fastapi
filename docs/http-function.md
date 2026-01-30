@@ -6,7 +6,6 @@
 
 ## 📋 目录导航
 
-- [部署特性](#部署特性)
 - [准备部署文件](#准备部署文件)
 - [项目结构](#项目结构)
 - [部署步骤](#部署步骤)
@@ -17,25 +16,6 @@
 
 ---
 
-## 部署特性
-
-HTTP 云函数适合以下场景：
-
-- **轻量级 API**：RESTful API 服务、微服务
-- **间歇性访问**：不需要持续运行的应用
-- **成本敏感**：按请求次数和执行时间计费
-- **快速部署**：无需容器化配置
-
-### 技术特点
-
-| 特性 | 说明 |
-|------|------|
-| **计费方式** | 按请求次数和执行时间 |
-| **启动方式** | 冷启动，按需启动 |
-| **端口要求** | 固定 9000 端口 |
-| **扩缩容** | 自动按请求扩缩 |
-| **Python 环境** | 预配置 Python 运行时 |
-
 ## 准备部署文件
 
 ### 1. 创建启动脚本
@@ -45,7 +25,7 @@ HTTP 云函数适合以下场景：
 ```bash
 #!/bin/bash
 export PORT=9000
-export PYTHONPATH="./env/lib/python3.10/site-packages:$PYTHONPATH"
+export PYTHONPATH="./third_party:$PYTHONPATH"
 /var/lang/python310/bin/python3.10 -m uvicorn main:app --host 0.0.0.0 --port 9000
 ```
 
@@ -94,6 +74,9 @@ uvicorn[standard]==0.24.0
 pydantic[email]==2.5.0
 ```
 
+安装依赖到 third_party 目录
+pip install -r requirements.txt -t third_party
+
 ## 项目结构
 
 ```
@@ -101,10 +84,7 @@ cloudrun-fastapi/
 ├── main.py                 # FastAPI 主应用文件
 ├── requirements.txt        # Python 依赖
 ├── scf_bootstrap          # 🔑 云函数启动脚本
-└── env/                   # 🔑 虚拟环境（部署时需要包含）
-    └── lib/
-        └── python3.10/
-            └── site-packages/  # Python 依赖包
+└── third_party/                   # Python 依赖包
 ```
 
 > 💡 **说明**：
@@ -112,7 +92,7 @@ cloudrun-fastapi/
 > - 设置 `PORT=9000` 环境变量确保应用监听云函数要求的端口
 > - 设置 `PYTHONPATH` 环境变量确保应用能找到依赖包
 > - 使用云函数运行时环境的 Python 解释器启动应用
-> - **重要**：HTTP 云函数部署时需要包含 `env` 目录及其依赖包
+> - **重要**：HTTP 云函数部署时需要包含 `third_party` 目录及其依赖包
 
 ## 部署步骤
 
@@ -148,7 +128,7 @@ tcb functions:deploy cloudrun-fastapi-app --dir ./
 
 ```bash
 # 创建部署包（包含 env 目录）
-zip -r cloudrun-fastapi-app.zip . -x ".git/*" "*.log" "Dockerfile" ".dockerignore" "__pycache__/*"
+zip -r cloudrun-fastapi-app.zip . -x ".git/*" "*.log" "Dockerfile" ".dockerignore" "__pycache__/*" "env/*"
 ```
 
 ## 访问应用

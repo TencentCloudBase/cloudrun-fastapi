@@ -91,7 +91,7 @@ cloudrun-fastapi/
 │   ├── http-function.md    # HTTP 云函数部署指南
 │   ├── cloud-run.md        # 云托管部署指南
 │   └── scf-deployment.md   # 腾讯云函数专用指南
-├── env/                    # 虚拟环境（本地开发用）
+├── third_party/            # Python 依赖安装目录，HTTP 云函数必须将依赖一同打包，并不会自己下载依赖
 ├── scf_bootstrap           # HTTP 云函数启动脚本
 ├── Dockerfile              # 云托管容器配置
 └── .dockerignore           # Docker 忽略文件
@@ -136,11 +136,11 @@ cloudrun-fastapi/
 # 1. 创建启动脚本
 echo '#!/bin/bash
 export PORT=9000
-export PYTHONPATH="./env/lib/python3.10/site-packages:$PYTHONPATH"
+export PYTHONPATH="./third_party:$PYTHONPATH"
 /var/lang/python310/bin/python3.10 main.py' > scf_bootstrap
 
-# 2. 安装依赖到 env 目录
-pip install -r requirements.txt -t env/lib/python3.10/site-packages/
+# 2. 安装依赖到 third_party 目录
+pip install -r requirements.txt -t third_party
 
 # 3. 打包上传到 CloudBase 控制台
 ```
